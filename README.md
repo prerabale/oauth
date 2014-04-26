@@ -1,4 +1,2 @@
-oauth
-=====
-
-The oauth module of Ark
+Ark OAuth Module
+================
