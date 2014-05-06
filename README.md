@@ -1,2 +1,2 @@
-Ark OAuth Module
+Arkor OAuth Module
 ================

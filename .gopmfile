@@ -1,0 +1,7 @@
+[target]
+path = github.com/arkors/oauth
+
+[deps]
+github.com/Unknwon/goconfig =
+github.com/go-martini/martini =
+github.com/go-xorm/xorm =
