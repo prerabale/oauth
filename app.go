@@ -1,25 +1,28 @@
 package main
 
-func RegistryApp() {
+import (
+  "github.com/go-martini/martini"
+  "github.com/martini-contrib/render"
+)
+
+func RegistryApp(p martini.Params, r render.Render) {
+}
+
+func UpdateApp(p martini.Params, r render.Render) {
 
 }
 
-func UpdateApp() {
+func GetAppKey(p martini.Params, r render.Render) {
 
 }
 
-func GetAppKey() {
+func ResetAppKey(p martini.Params, r render.Render) {
 
 }
 
-func ResetAppKey() {
+func ExchangeAppToken(p martini.Params, r render.Render) {
 
 }
 
-func ExchangeAppToken() {
-
-}
-
-func VerifyToken() {
-
+func VerifyToken(p martini.Params, r render.Render) {
 }
