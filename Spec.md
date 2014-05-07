@@ -172,7 +172,7 @@ Content-Type: application/json
 
 ###### Example Request
 ```
-POST /v1/updates/cb21df532c6647383af7efa0fd8405f2/1389085779854 HTTP/1.1
+GET /v1/apps/token/verify/cb21df532c6647383af7efa0fd8405f2/1389085779854 HTTP/1.1
 Host: oauth.arkors.com
 X-Arkors-Application-Id: 232
 X-Arkors-Application-Log: 5024442115e7bd738354c1fac662aed5
