@@ -1,7 +1,6 @@
 package main
 
 import (
-  _ "github.com/go-sql-driver/mysql"
   _ "github.com/go-xorm/xorm"
   "time"
 )
@@ -13,4 +12,5 @@ type Application struct {
   key     string    `xorm:"unique not null"`
   Updated time.Time `xorm:"updated"`
   Created time.Time `xorm:"created"`
+  Version int       `xorm:"version"`
 }

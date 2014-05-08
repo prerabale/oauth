@@ -2,12 +2,13 @@ package main
 
 import (
   "github.com/go-martini/martini"
+  "github.com/go-xorm/xorm"
   "github.com/martini-contrib/render"
   "net/http"
   "strconv"
 )
 
-func RegistryApp(app Application, args martini.Params, r render.Render) {
+func RegistryApp(orm *xorm.Engine, app Application, args martini.Params, r render.Render) {
   appId, err := strconv.ParseInt(args["app"], 10, 64)
   if err == nil {
     r.JSON(http.StatusCreated, map[string]interface{}{"app": appId, "key": "cb21df532c6647383af7efa0fd8405f2"})
