@@ -1,17 +1,18 @@
 package main
 
 import (
-  "fmt"
   "github.com/go-martini/martini"
   "github.com/martini-contrib/render"
+  "net/http"
   "strconv"
 )
 
 func RegistryApp(app Application, args martini.Params, r render.Render) {
-  fmt.Println(app.Sign)
   appId, err := strconv.ParseInt(args["app"], 10, 64)
   if err == nil {
-    r.JSON(201, map[string]interface{}{"app": appId, "key": "cb21df532c6647383af7efa0fd8405f2"})
+    r.JSON(http.StatusCreated, map[string]interface{}{"app": appId, "key": "cb21df532c6647383af7efa0fd8405f2"})
+  } else {
+    r.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The application's id must be numerical."})
   }
 }
 
