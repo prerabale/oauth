@@ -28,7 +28,7 @@ func init() {
   }
 }
 
-func db() martini.Handler {
+func DB() martini.Handler {
   return func(c martini.Context) {
     c.Map(orm)
   }
@@ -37,10 +37,10 @@ func db() martini.Handler {
 func main() {
   m := martini.Classic()
   m.Use(render.Renderer())
-  m.Use(db())
+  m.Use(DB())
 
   m.Group("/v1/apps", func(r martini.Router) {
-    r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+    r.Post("/:app", binding.Json(handler.RegistryApplication{}), handler.RegistryApp)
     r.Put("/:app", handler.UpdateApp)
     r.Get("/:app/key", handler.GetAppKey)
     r.Put("/:app/key", handler.ResetAppKey)
