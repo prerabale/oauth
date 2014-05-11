@@ -3,9 +3,10 @@ package main
 import (
   "bytes"
   "github.com/arkors/oauth/handler"
-  "github.com/codegangsta/martini"
-  "github.com/codegangsta/martini-contrib/binding"
-  "github.com/codegangsta/martini-contrib/render"
+  "github.com/arkors/oauth/model"
+  "github.com/go-martini/martini"
+  "github.com/martini-contrib/binding"
+  "github.com/martini-contrib/render"
   . "github.com/onsi/ginkgo"
   . "github.com/onsi/gomega"
   "net/http"
@@ -18,7 +19,7 @@ var _ = Describe("Todo", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Post("/:app", binding.Json(handler.RegistryApplication{}), handler.RegistryApp)
+      r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
     })
     response := httptest.NewRecorder()
     request, _ := http.NewRequest("POST", "/v1/apps/232", bytes.NewReader([]byte("{\"sign\":\"5024442115e7bd738354c1fac662aed5\"}")))

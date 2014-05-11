@@ -40,7 +40,7 @@ func main() {
   m.Use(Db())
 
   m.Group("/v1/apps", func(r martini.Router) {
-    r.Post("/:app", binding.Json(handler.RegistryApplication{}), handler.RegistryApp)
+    r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
     r.Put("/:app", handler.UpdateApp)
     r.Get("/:app/key", handler.GetAppKey)
     r.Put("/:app/key", handler.ResetAppKey)
