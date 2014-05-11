@@ -23,9 +23,12 @@ var _ = Describe("Testing For Oauth App And Token", func() {
     m.Group("/v1/apps", func(r martini.Router) {
       r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
     })
+
     response := httptest.NewRecorder()
     request, _ := http.NewRequest("POST", "/v1/apps/233", bytes.NewReader([]byte("{\"sign\":\"5024442115e7bd738354c1fac662aed5\"}")))
-    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
+    request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
+    request.Header.Set("Accept", "application/json")
     m.ServeHTTP(response, request)
 
     type Result struct {
