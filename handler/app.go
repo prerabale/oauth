@@ -26,6 +26,6 @@ func GetAppKey(orm *xorm.Engine, args martini.Params, r render.Render) {
 
 }
 
-func ResetAppKey(orm *xorm.Engine, app model.Application, args martini.Params, r render.Render) {
+func ResetAppKey(orm *xorm.Engine, args martini.Params, r render.Render) {
 
 }

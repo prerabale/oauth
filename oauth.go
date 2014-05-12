@@ -43,7 +43,7 @@ func main() {
     r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
     r.Put("/:app", binding.Json(model.Application{}), handler.UpdateApp)
     r.Get("/:app/key", handler.GetAppKey)
-    r.Put("/:app/key", binding.Json(model.Application{}), handler.ResetAppKey)
+    r.Put("/:app/key", handler.ResetAppKey)
     r.Post("/:app/sign", handler.ExchangeAppToken)
     r.Get("/token/verify/:token/:timestamp", handler.VerifyToken)
   })

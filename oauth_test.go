@@ -257,3 +257,129 @@ var _ = Describe("Testing Oauth App PUT", func() {
   })
 
 })
+
+var _ = Describe("Testing Oauth App Key GET", func() {
+  It("GET '/v1/apps/:app/key' will returns a 200 status code", func() {
+
+    m := martini.Classic()
+    m.Use(render.Renderer())
+    m.Use(Db())
+    m.Group("/v1/apps", func(r martini.Router) {
+      r.Get("/:app/key", handler.GetAppKey)
+    })
+
+    response = httptest.NewRecorder()
+    request, _ := http.NewRequest("GET", "/v1/apps/233", nil)
+    request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
+    request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
+    request.Header.Set("Accept", "application/json")
+    m.ServeHTTP(response, request)
+
+    type Result struct {
+      App int
+      Key string
+    }
+
+    var result Result
+    err := json.Unmarshal(response.Body.Bytes(), &result)
+
+    Ω(err).Should(BeNil())
+    Ω(result.App).Should(BeEquivalentTo(233))
+    Ω(len(result.Key)).Should(BeNumerically("==", 32))
+
+    Expect(response.Code).To(Equal(http.StatusOK))
+  })
+
+  It("GET '/v1/apps/:app/key' with non application id will returns a 404 status code", func() {
+
+    m := martini.Classic()
+    m.Use(render.Renderer())
+    m.Use(Db())
+    m.Group("/v1/apps", func(r martini.Router) {
+      r.Get("/:app/key", handler.GetAppKey)
+    })
+
+    response = httptest.NewRecorder()
+    request, _ := http.NewRequest("GET", "/v1/apps/999999", nil)
+    request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
+    request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
+    request.Header.Set("Accept", "application/json")
+    m.ServeHTTP(response, request)
+
+    type Result struct {
+      Error string
+    }
+
+    var result Result
+    err := json.Unmarshal(response.Body.Bytes(), &result)
+
+    Ω(err).Should(BeNil())
+    Ω(len(result.Error)).Should(BeNumerically(">", 0))
+
+    Expect(response.Code).To(Equal(http.StatusNotFound))
+  })
+
+})
+
+var _ = Describe("Testing Oauth App Key RESET", func() {
+  It("PUT '/v1/apps/:app/key' will returns a 200 status code", func() {
+
+    m := martini.Classic()
+    m.Use(render.Renderer())
+    m.Use(Db())
+    m.Group("/v1/apps", func(r martini.Router) {
+      r.Put("/:app/key", handler.ResetAppKey)
+    })
+
+    response = httptest.NewRecorder()
+    request, _ := http.NewRequest("PUT", "/v1/apps/233", nil)
+    request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
+    request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
+    request.Header.Set("Accept", "application/json")
+    m.ServeHTTP(response, request)
+
+    type Result struct {
+      App int
+      Key string
+    }
+
+    var result Result
+    err := json.Unmarshal(response.Body.Bytes(), &result)
+
+    Ω(err).Should(BeNil())
+    Ω(result.App).Should(BeEquivalentTo(233))
+    Ω(len(result.Key)).Should(BeNumerically("==", 32))
+
+    Expect(response.Code).To(Equal(http.StatusOK))
+  })
+
+  It("PUT '/v1/apps/:app/key' with non application id will returns a 404 status code", func() {
+
+    m := martini.Classic()
+    m.Use(render.Renderer())
+    m.Use(Db())
+    m.Group("/v1/apps", func(r martini.Router) {
+      r.Put("/:app/key", handler.ResetAppKey)
+    })
+
+    response = httptest.NewRecorder()
+    request, _ := http.NewRequest("PUT", "/v1/apps/999999", nil)
+    request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
+    request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
+    request.Header.Set("Accept", "application/json")
+    m.ServeHTTP(response, request)
+
+    type Result struct {
+      Error string
+    }
+
+    var result Result
+    err := json.Unmarshal(response.Body.Bytes(), &result)
+
+    Ω(err).Should(BeNil())
+    Ω(len(result.Error)).Should(BeNumerically(">", 0))
+
+    Expect(response.Code).To(Equal(http.StatusNotFound))
+  })
+
+})
