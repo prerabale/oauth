@@ -18,14 +18,14 @@ func RegistryApp(orm *xorm.Engine, app model.Application, args martini.Params, r
   }
 }
 
-func UpdateApp(args martini.Params, r render.Render) {
+func UpdateApp(orm *xorm.Engine, app model.Application, args martini.Params, r render.Render) {
 
 }
 
-func GetAppKey(args martini.Params, r render.Render) {
+func GetAppKey(orm *xorm.Engine, args martini.Params, r render.Render) {
 
 }
 
-func ResetAppKey(args martini.Params, r render.Render) {
+func ResetAppKey(orm *xorm.Engine, app model.Application, args martini.Params, r render.Render) {
 
 }
