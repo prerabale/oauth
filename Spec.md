@@ -127,7 +127,7 @@ Content-Type: application/json
 * 400 - Errors (invalid json, missing or invalid fields, etc)
 * 404 - 没有找到 Application 的记录
 
-##### POST /v1/apps/sign
+##### POST /v1/apps/:app/sign
 
 由 Application 客户端调用，使用 User Key 和 Application Secret Key 根据算法生成的签名换取 Arkors 平台运行的 Token 。
 
@@ -137,7 +137,7 @@ Content-Type: application/json
 
 ###### Example Request
 ```
-POST /v1/apps/sign HTTP/1.1
+POST /v1/apps/233/sign HTTP/1.1
 Host: oauth.arkors.com
 X-Arkors-Application-Id: 232
 X-Arkors-Application-Sign: cb21df532c6647383af7efa0fd8405f2,1389085779854
@@ -190,4 +190,4 @@ Content-Type: application/json
 ###### Status Codes
 * 200 - Token 验证成功
 * 400 - Errors (invalid json, missing, duplication or invalid fields, etc)
-* 404 - 没有找到 Application 的记录
+* 404 - 没有找到 Token 的记录
