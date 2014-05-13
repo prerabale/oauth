@@ -190,4 +190,4 @@ Content-Type: application/json
 ###### Status Codes
 * 200 - Token 验证成功
 * 400 - Errors (invalid json, missing, duplication or invalid fields, etc)
-* 404 - 没有找到 Application 的记录
+* 404 - 没有找到 Token 的记录
