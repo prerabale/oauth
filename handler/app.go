@@ -1,24 +1,26 @@
 package handler
 
 import (
-  "github.com/arkors/oauth/model"
-  "github.com/go-martini/martini"
-  "github.com/go-xorm/xorm"
-  "github.com/martini-contrib/render"
-  "net/http"
-  "strconv"
+	"net/http"
+	"strconv"
+
+	"github.com/arkors/oauth/model"
+	"github.com/garyburd/redigo/redis"
+	"github.com/go-martini/martini"
+	"github.com/go-xorm/xorm"
+	"github.com/martini-contrib/render"
 )
 
 func RegistryApp(orm *xorm.Engine, app model.Application, args martini.Params, r render.Render) {
-  appId, err := strconv.ParseInt(args["app"], 10, 64)
-  if err == nil {
-    r.JSON(http.StatusCreated, map[string]interface{}{"app": appId, "key": "cb21df532c6647383af7efa0fd8405f2"})
-  } else {
-    r.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The application's id must be numerical."})
-  }
+	appId, err := strconv.ParseInt(args["app"], 10, 64)
+	if err == nil {
+		r.JSON(http.StatusCreated, map[string]interface{}{"app": appId, "key": "cb21df532c6647383af7efa0fd8405f2"})
+	} else {
+		r.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The application's id must be numerical."})
+	}
 }
 
-func UpdateApp(orm *xorm.Engine, app model.Application, args martini.Params, r render.Render) {
+func UpdateApp(pool *redis.Pool, orm *xorm.Engine, app model.Application, args martini.Params, r render.Render) {
 
 }
 
@@ -26,6 +28,6 @@ func GetAppKey(orm *xorm.Engine, args martini.Params, r render.Render) {
 
 }
 
-func ResetAppKey(orm *xorm.Engine, args martini.Params, r render.Render) {
+func ResetAppKey(pool *redis.Pool, orm *xorm.Engine, args martini.Params, r render.Render) {
 
 }
