@@ -80,12 +80,25 @@ func VerifyJSONBody() martini.Handler {
   }
 }
 
+func VerifyHTTPHeader() martini.Handler {
+  return func(c martini.Context, w http.ResponseWriter, r *http.Request) {
+    _, log := r.Header["X-Arkors-Application-Log"]
+    _, client := r.Header["X-Arkors-Application-Client"]
+    if log != true || client != true {
+      w.WriteHeader(http.StatusBadRequest)
+      w.Header().Set("Content-Type", "application/json")
+      w.Write([]byte("{\"error\":\"Invalid request header, it should be include 'X-Arkors-Application-Log'  and 'X-Arkors-Application-Client'.\"}"))
+    }
+  }
+}
+
 func main() {
   m := martini.Classic()
   m.Use(render.Renderer())
   m.Use(Db())
   m.Use(Pool())
   m.Use(VerifyJSONBody())
+  m.Use(VerifyHTTPHeader())
 
   m.Group("/v1/apps", func(r martini.Router) {
     r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
