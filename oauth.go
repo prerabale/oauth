@@ -4,19 +4,18 @@ import (
   "encoding/json"
   "github.com/arkors/oauth/handler"
   "github.com/arkors/oauth/model"
-  "github.com/garyburd/redigo/redis"
   "github.com/go-martini/martini"
-  _ "github.com/go-sql-driver/mysql"
   "github.com/go-xorm/xorm"
-  "github.com/martini-contrib/binding"
   "github.com/martini-contrib/render"
   "io/ioutil"
   "log"
   "net/http"
+  "github.com/hoisie/redis"
+  _ "github.com/go-sql-driver/mysql"
 )
 
 var orm *xorm.Engine
-var pool *redis.Pool
+var redisClient redis.Client
 
 func init() {
   var err error
@@ -26,20 +25,9 @@ func init() {
   if err != nil {
     log.Fatalf("Fail to create engine: %v\n", err)
   }
-
   if err = orm.Sync(new(model.Application)); err != nil {
     log.Fatalf("Fail to sync database: %v\n", err)
   }
-
-  pool = redis.NewPool(func() (redis.Conn, error) {
-    c, err := redis.Dial("tcp", ":6379")
-
-    if err != nil {
-      return nil, err
-    }
-
-    return c, err
-  }, 10)
 
 }
 
@@ -49,9 +37,10 @@ func Db() martini.Handler {
   }
 }
 
-func Pool() martini.Handler {
+func RedisDb() martini.Handler {
   return func(c martini.Context) {
-    c.Map(pool)
+    redisClient.Addr="127.0.0.1:6379"
+    c.Map(redisClient)
   }
 }
 
@@ -67,6 +56,7 @@ func VerifyJSONBody() martini.Handler {
       w.WriteHeader(http.StatusBadRequest)
       w.Header().Set("Content-Type", "application/json")
       w.Write([]byte("{\"error\":\"Invalid request body.\"}"))
+      return
     }
 
     var app model.Application
@@ -75,6 +65,9 @@ func VerifyJSONBody() martini.Handler {
       w.WriteHeader(http.StatusBadRequest)
       w.Header().Set("Content-Type", "application/json")
       w.Write([]byte("{\"error\":\"Invalid request body, it should be JSON format.\"}"))
+      return
+    }else{
+      c.Map(app)
     }
 
   }
@@ -88,6 +81,7 @@ func VerifyHTTPHeader() martini.Handler {
       w.WriteHeader(http.StatusBadRequest)
       w.Header().Set("Content-Type", "application/json")
       w.Write([]byte("{\"error\":\"Invalid request header, it should be include 'X-Arkors-Application-Log'  and 'X-Arkors-Application-Client'.\"}"))
+      return
     }
   }
 }
@@ -96,13 +90,13 @@ func main() {
   m := martini.Classic()
   m.Use(render.Renderer())
   m.Use(Db())
-  m.Use(Pool())
+  m.Use(RedisDb())
   m.Use(VerifyJSONBody())
   m.Use(VerifyHTTPHeader())
 
   m.Group("/v1/apps", func(r martini.Router) {
-    r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
-    r.Put("/:app", binding.Json(model.Application{}), handler.UpdateApp)
+    r.Post("/:app",handler.RegistryApp)
+    r.Put("/:app",handler.UpdateApp)
     r.Get("/:app/key", handler.GetAppKey)
     r.Put("/:app/key", handler.ResetAppKey)
     r.Post("/:app/sign", handler.ExchangeAppToken)
