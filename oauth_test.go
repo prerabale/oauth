@@ -16,7 +16,7 @@ import (
 )
 
 var response *httptest.ResponseRecorder
-
+/*
 var _ = Describe("Testing Oauth App Create", func() {
   It("POST '/v1/apps/:app' will returns a 201 status code", func() {
 
@@ -168,7 +168,7 @@ var _ = Describe("Testing Oauth App Create", func() {
   })
 
 })
-/*
+*/
 var _ = Describe("Testing Oauth App PUT", func() {
   It("PUT '/v1/apps/:app' will returns a 200 status code", func() {
 
@@ -187,12 +187,8 @@ var _ = Describe("Testing Oauth App PUT", func() {
     request.Header.Set("Accept", "application/json")
     m.ServeHTTP(response, request)
 
-    type Result struct {
-      App int
-      Key string
-    }
 
-    var result Result
+    var result model.Application
     err := json.Unmarshal(response.Body.Bytes(), &result)
 
     Ω(err).Should(BeNil())
@@ -293,7 +289,7 @@ var _ = Describe("Testing Oauth App PUT", func() {
   })
 
 })
-
+/*
 var _ = Describe("Testing Oauth App Key GET", func() {
   It("GET '/v1/apps/:app/key' will returns a 200 status code", func() {
 
