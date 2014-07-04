@@ -94,7 +94,7 @@ Content-Type: application/json
 ```
 
 ###### Status Codes
-* 200 - 返回 Application 的 User Key
+* 200 - 返回 Application 的 Secret Key
 * 400 - Errors (invalid json, missing or invalid fields, etc)
 * 404 - 没有找到 Application 的记录
 
