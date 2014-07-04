@@ -9,14 +9,13 @@ import (
   "github.com/arkors/oauth/handler"
   "github.com/arkors/oauth/model"
   "github.com/go-martini/martini"
-  "github.com/martini-contrib/binding"
   "github.com/martini-contrib/render"
   . "github.com/onsi/ginkgo"
   . "github.com/onsi/gomega"
 )
 
 var response *httptest.ResponseRecorder
-/*
+
 var _ = Describe("Testing Oauth App Create", func() {
   It("POST '/v1/apps/:app' will returns a 201 status code", func() {
 
@@ -24,8 +23,10 @@ var _ = Describe("Testing Oauth App Create", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+      r.Post("/:app",  handler.RegistryApp)
     })
 
     response = httptest.NewRecorder()
@@ -53,8 +54,11 @@ var _ = Describe("Testing Oauth App Create", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+      r.Post("/:app",  handler.RegistryApp)
     })
 
     response = httptest.NewRecorder()
@@ -83,8 +87,11 @@ var _ = Describe("Testing Oauth App Create", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+      r.Post("/:app",  handler.RegistryApp)
     })
 
     response = httptest.NewRecorder()
@@ -113,8 +120,12 @@ var _ = Describe("Testing Oauth App Create", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+      r.Post("/:app",  handler.RegistryApp)
     })
 
     response = httptest.NewRecorder()
@@ -143,8 +154,12 @@ var _ = Describe("Testing Oauth App Create", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Post("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+      r.Post("/:app",  handler.RegistryApp)
     })
 
     response = httptest.NewRecorder()
@@ -168,7 +183,7 @@ var _ = Describe("Testing Oauth App Create", func() {
   })
 
 })
-*/
+
 var _ = Describe("Testing Oauth App PUT", func() {
   It("PUT '/v1/apps/:app' will returns a 200 status code", func() {
 
@@ -176,8 +191,13 @@ var _ = Describe("Testing Oauth App PUT", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
+
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Put("/:app", binding.Json(model.Application{}), handler.UpdateApp)
+      r.Put("/:app",handler.UpdateApp)
     })
 
     response = httptest.NewRecorder()
@@ -188,7 +208,7 @@ var _ = Describe("Testing Oauth App PUT", func() {
     m.ServeHTTP(response, request)
 
 
-    var result model.Application
+    var result model.ReApplication
     err := json.Unmarshal(response.Body.Bytes(), &result)
 
     Ω(err).Should(BeNil())
@@ -204,8 +224,12 @@ var _ = Describe("Testing Oauth App PUT", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Put("/:app", binding.Json(model.Application{}), handler.UpdateApp)
+      r.Put("/:app",handler.UpdateApp)
     })
 
     response = httptest.NewRecorder()
@@ -234,8 +258,12 @@ var _ = Describe("Testing Oauth App PUT", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Put("/:app", binding.Json(model.Application{}), handler.UpdateApp)
+      r.Put("/:app", handler.UpdateApp)
     })
 
     response = httptest.NewRecorder()
@@ -264,12 +292,16 @@ var _ = Describe("Testing Oauth App PUT", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyJSONBody())
+    m.Use(VerifyHTTPHeader())
+
+
     m.Group("/v1/apps", func(r martini.Router) {
-      r.Put("/:app", binding.Json(model.Application{}), handler.RegistryApp)
+      r.Put("/:app",handler.UpdateApp)
     })
 
     response = httptest.NewRecorder()
-    request, _ := http.NewRequest("POST", "/v1/apps/233oauth", bytes.NewReader([]byte("{\"grimm\":\"5024442115e7bd738354c1fac662aed5\"}")))
+    request, _ := http.NewRequest("PUT", "/v1/apps/233", bytes.NewReader([]byte("{\"grimm\":\"5024442115e7bd738354c1fac662aed5\"}")))
     request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
     request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
     request.Header.Set("Accept", "application/json")
@@ -289,7 +321,7 @@ var _ = Describe("Testing Oauth App PUT", func() {
   })
 
 })
-/*
+
 var _ = Describe("Testing Oauth App Key GET", func() {
   It("GET '/v1/apps/:app/key' will returns a 200 status code", func() {
 
@@ -297,44 +329,75 @@ var _ = Describe("Testing Oauth App Key GET", func() {
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyHTTPHeader())
     m.Group("/v1/apps", func(r martini.Router) {
       r.Get("/:app/key", handler.GetAppKey)
     })
 
     response = httptest.NewRecorder()
-    request, _ := http.NewRequest("GET", "/v1/apps/233", nil)
+    request, _ := http.NewRequest("GET", "/v1/apps/233/key", nil)
     request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
     request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
     request.Header.Set("Accept", "application/json")
     m.ServeHTTP(response, request)
 
     type Result struct {
-      App int
+      App int64
       Key string
     }
 
     var result Result
     err := json.Unmarshal(response.Body.Bytes(), &result)
-
     Ω(err).Should(BeNil())
+
     Ω(result.App).Should(BeEquivalentTo(233))
     Ω(len(result.Key)).Should(BeNumerically("==", 32))
 
     Expect(response.Code).To(Equal(http.StatusOK))
   })
 
+  It("GET '/v1/apps/:app/key' will returns a 400 status code", func() {
+    m := martini.Classic()
+    m.Use(render.Renderer())
+    m.Use(Db())
+    m.Use(RedisDb())
+    m.Use(VerifyHTTPHeader())
+    m.Group("/v1/apps", func(r martini.Router) {
+      r.Get("/:app/key", handler.GetAppKey)
+    })
+
+    response = httptest.NewRecorder()
+    request, _ := http.NewRequest("GET", "/v1/apps/233abc/key", nil)
+    request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
+    request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
+    request.Header.Set("Accept", "application/json")
+    m.ServeHTTP(response, request)
+
+    type Result struct {
+         Error string
+    }
+
+    var result Result
+    err := json.Unmarshal(response.Body.Bytes(), &result)
+
+    Ω(err).Should(BeNil())
+    Ω(len(result.Error)).Should(BeNumerically(">", 0))
+
+    Expect(response.Code).To(Equal(http.StatusBadRequest))
+  })
   It("GET '/v1/apps/:app/key' with non application id will returns a 404 status code", func() {
 
     m := martini.Classic()
     m.Use(render.Renderer())
     m.Use(Db())
     m.Use(RedisDb())
+    m.Use(VerifyHTTPHeader())
     m.Group("/v1/apps", func(r martini.Router) {
       r.Get("/:app/key", handler.GetAppKey)
     })
 
     response = httptest.NewRecorder()
-    request, _ := http.NewRequest("GET", "/v1/apps/999999", nil)
+    request, _ := http.NewRequest("GET", "/v1/apps/999999/key", nil)
     request.Header.Set("X-Arkors-Application-Log", "5024442115e7bd738354c1fac662aed5")
     request.Header.Set("X-Arkors-Application-Client", "127.0.0.1,TEST")
     request.Header.Set("Accept", "application/json")
@@ -354,7 +417,7 @@ var _ = Describe("Testing Oauth App Key GET", func() {
   })
 
 })
-
+/*
 var _ = Describe("Testing Oauth App Key RESET", func() {
   It("PUT '/v1/apps/:app/key' will returns a 200 status code", func() {
 
@@ -419,7 +482,6 @@ var _ = Describe("Testing Oauth App Key RESET", func() {
   })
 
 })
-
 var _ = Describe("Testing Oauth App Exchange For Token", func() {
   It("POST '/v1/apps/:app/sign' will returns a 201 status code", func() {
 

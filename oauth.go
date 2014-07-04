@@ -47,7 +47,6 @@ func RedisDb() martini.Handler {
 func VerifyJSONBody() martini.Handler {
   return func(c martini.Context, w http.ResponseWriter, r *http.Request) {
     data, err := ioutil.ReadAll(r.Body)
-
     if len(data) == 0 {
       return
     }

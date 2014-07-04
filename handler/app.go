@@ -58,7 +58,13 @@ func RegistryApp(orm *xorm.Engine, app model.Application, args martini.Params, r
         return
       }
       redisClient.Set(args["app"],applicationJson)
-      r.JSON(http.StatusCreated,app)
+
+      result:=new(model.ReApplication)
+      result.App=app.App
+      result.Key=app.Key
+
+      r.JSON(http.StatusCreated,result)
+      return
     }
   }
 }
@@ -82,12 +88,9 @@ func UpdateApp(orm *xorm.Engine, app model.Application, args martini.Params, r r
   secretKey := hex.EncodeToString(h.Sum(nil))
   app.App = appId
   app.Key = secretKey
-  fmt.Println(app)
-  fmt.Println("aaaaaaaaaaaaaaaaaaaaa")
   //判断更新的Application是否存在，存在进行更新，不存在返回错误
-  affect,updateErr:=orm.Cols("sign","key").Update(app)
-  fmt.Println(updateErr)
-  fmt.Println("bbbbbbbbbbbbbbbbbbbbb")
+  //orm.ShowSQL=true
+  affect,updateErr:=orm.Cols("sign","key","updated","created").Where("app=?",appId).Update(app)
   if updateErr!=nil {
     r.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Database update error"})
     return
@@ -104,13 +107,54 @@ func UpdateApp(orm *xorm.Engine, app model.Application, args martini.Params, r r
       }
       // 更新redis库
       redisClient.Set(args["app"],applicationJson)
-      r.JSON(http.StatusOK,app)
+
+      result:=new(model.ReApplication)
+      result.App=app.App
+      result.Key=app.Key
+
+      r.JSON(http.StatusOK,result)
       return
    }
  }
 }
 
-func GetAppKey(orm *xorm.Engine, args martini.Params, r render.Render) {
+func GetAppKey(orm *xorm.Engine, args martini.Params, r render.Render,redisClient redis.Client) {
+  appId, err := strconv.ParseInt(args["app"], 10, 64)
+  if err != nil {
+    r.JSON(http.StatusBadRequest, map[string]interface{}{"error": "The application's id must be numerical."})
+    return
+  }
+  //在redis查询记录是否存在,如果不存在，在mysql中继续检索
+  if result,_:=redisClient.Get(args["app"]); result==nil {
+    applicationModel:=new(model.Application)
+    has,err:=orm.Where("app=?",appId).Get(applicationModel)
+    //在redis未查询到记录，在mysql中查询有记录，将记录回插到redis中
+    if has {
+       jsonApplication,_:=json.Marshal(applicationModel)
+       redisClient.Set(args["app"],jsonApplication)
+       resultApp:=new(model.ReApplication)
+       resultApp.App=applicationModel.App
+       resultApp.Key=applicationModel.Key
+       r.JSON(http.StatusOK,resultApp)
+       return
+    } else {
+         if err !=nil {
+            r.JSON(http.StatusBadRequest, map[string]interface{}{"error": "Mysql Database Get Data Error!"})
+            return
+         }else{
+            r.JSON(http.StatusNotFound, map[string]interface{}{"error": "The Application is not exists!"})
+            return
+         }
+    }
+  }else{
+      var appModel model.Application
+      json.Unmarshal(result,&appModel)
+      resultApp:=new(model.ReApplication)
+      resultApp.App=appModel.App
+      resultApp.Key=appModel.Key
+      r.JSON(http.StatusOK,resultApp)
+      return
+  }
 
 }
 
